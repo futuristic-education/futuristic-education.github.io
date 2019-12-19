@@ -1,0 +1,188 @@
+// Shorthand easing functions
+
+$easeCubic: cubic-bezier(0.645, 0.045, 0.355, 1.000);
+$easeOutCubic: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+
+// Shortcut mixins
+
+@mixin clear() {
+	&:after {
+		content: '';
+		display: block;
+		clear: both;
+	}
+}
+@mixin crisp() {
+	image-rendering: optimizeSpeed;             /* STOP SMOOTHING, GIVE ME SPEED  */
+	image-rendering: -moz-crisp-edges;          /* Firefox                        */
+	image-rendering: -o-crisp-edges;            /* Opera                          */
+	image-rendering: -webkit-optimize-contrast; /* Chrome (and eventually Safari) */
+	image-rendering: pixelated; /* Chrome */
+	image-rendering: optimize-contrast;         /* CSS3 Proposed                  */
+	-ms-interpolation-mode: nearest-neighbor;   /* IE8+                           */
+}
+@mixin hide_text() {
+    overflow: hidden;
+    color: transparent;
+	font-size: 0;
+	text-indent: -1000em;
+}
+
+@mixin hide_scrollbars() {
+	-webkit-overflow-scrolling: touch;
+	-ms-overflow-style: none;
+
+	&::-webkit-scrollbar {
+	    display: none;
+	}
+}
+@mixin spacing( $prop, $factor: 1 ) {
+	#{$prop}: 120px * $factor;
+
+	@include desktop() {
+		@if str-index($prop, 'top') or str-index($prop, 'bottom') or str-index($prop, '-y') {
+			#{$prop}: 120px * $factor;
+		} @else {
+			#{$prop}: 80px * $factor;
+		}
+	}
+	@include laptop() {
+		@if str-index($prop, 'top') or str-index($prop, 'bottom') or str-index($prop, '-y') {
+			#{$prop}: 90px * $factor;
+		} @else {
+			#{$prop}: 60px * $factor;
+		}
+	}
+	@include mobile() {
+		@if str-index($prop, 'top') or str-index($prop, 'bottom') or str-index($prop, '-y') {
+			#{$prop}: 80px * $factor;
+		} @else {
+			#{$prop}: 50px * $factor;
+		}
+	}
+	@include phone() {
+		@if str-index($prop, 'top') or str-index($prop, 'bottom') or str-index($prop, '-y') {
+			#{$prop}: 80px * $factor;
+		} @else {
+			#{$prop}: 30px * $factor;
+		}
+	}
+}
+@mixin hover() {
+	@include mobile(false) {
+		&:hover {
+			@content;
+		}
+	}
+	@include mobile() {
+		&:active {
+			@content;
+		}
+	}
+}
+@mixin inner() {
+	@include spacing('padding-left');
+	@include spacing('padding-right');
+	width: 100%;
+	max-width: 940px;
+	margin-left: auto;
+	margin-right: auto;
+	box-sizing: border-box;
+
+	@include laptop() {
+		max-width: 860px;
+	}
+	@include mobile() {
+		max-width: 750px;
+	}
+}
+@mixin middle_outer() {
+	font-size: 0;
+	overflow: hidden;
+	white-space: nowrap;
+
+	&:after {
+		content: '';
+		display: inline-block;
+		vertical-align: middle;
+		width: 0;
+		height: 100%;
+	}
+}
+@mixin middle() {
+	display: inline-block;
+	vertical-align: middle;
+	white-space: normal;
+}
+@mixin preload() {
+	// transition: opacity 1s;
+	transition: opacity 1s; // , transform 1s $easeOutCubic; // for enter stage
+
+	&.preload {
+		opacity: 0;
+	}
+}
+@mixin lining_nums() {
+	font-variant-numeric: lining-nums;
+	-moz-font-feature-settings: "lnum";
+	-webkit-font-feature-settings: "lnum";
+	font-feature-settings: "lnum";
+}
+@mixin cover( $url ) {
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	@if $url != '' {
+		background-image: image-url($url);
+	}
+}
+
+// Responsive mixins
+
+@mixin phone( $less: true ) {
+	@include respond_at_width(600px, $less) {
+		@content;
+	}
+}
+@mixin mobile( $less: true ) {
+	@include respond_at_width(900px, $less) {
+		@content;
+	}
+}
+@mixin mobile_menu( $less: true ) {
+	@include respond_at_width(1000px, $less) {
+		@content;
+	}
+}
+@mixin laptop( $less: true ) {
+	@include respond_at_width(1200px, $less) {
+		@content;
+	}
+}
+@mixin desktop( $less: true ) {
+	@include respond_at_width(1800px, $less) {
+		@content;
+	}
+}
+@mixin respond_at_width($break, $less) {
+	$query: 'max-width: ' + $break;
+	@if $less == false {
+		$query: 'min-width: ' + ($break + 1px);
+	}
+	@media ( #{$query} ) {
+		@content;
+	}
+}
+.desktop_only {
+	@include mobile_menu() {
+		display: none !important;
+	}
+}
+.mobile_only {
+	@include mobile_menu(false) {
+		display: none !important;
+	}
+}
+.non_scrollable {
+	overflow-y: hidden;
+}
