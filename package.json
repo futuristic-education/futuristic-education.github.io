@@ -1,7 +1,7 @@
 {
   "scripts": {
     "clean": "rm -rf dist && mkdir dist",
-    "build": "npm run clean && npm run static && npm run sass",
+    "dist": "npm run clean && npm run static && npm run sass",
     "static": "rsync -a src/** dist --exclude sass",
     "sass": "node-sass --output-style compressed src/sass/styles.scss dist/css/styles.css",
     "open": "open dist/index.html",
