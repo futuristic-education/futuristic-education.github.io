@@ -44,7 +44,7 @@ $label_font: 'Roboto Mono', monospace;
 	font-family: $heading_font;
 	font-size: 44px * 1.2;
 	line-height: 1.1;
-	letter-spacing: 0.01em;
+	letter-spacing: 0.015em;
 	text-align: center;
 	font-weight: normal;
 
@@ -150,6 +150,14 @@ $label_font: 'Roboto Mono', monospace;
 		opacity: 1;
 	}
 }
+@keyframes sway {
+	0% {
+		transform: translateX(-4vw);
+	}
+	100% {
+		transform: translateX(4vw);
+	}
+}
 
 ::selection {
 	background-color: rgba($cyan,0.5);
@@ -222,6 +230,7 @@ body {
 }
 #page_nav {
 	position: fixed;
+	z-index: 10;
 	top: 0;
 	left: 0;
 	bottom: 0;
@@ -307,10 +316,17 @@ body {
 	}
 }
 main {
+	width: 100%;
+	overflow: auto;
+	overflow-x: hidden;
+
 	.block {
 		position: relative;
 		padding: 160px;
 
+		@include desktop(false) {
+			padding: 20vh 160px;
+		}
 		@include mobile() {
 			padding: 100px 80px;
 		}
@@ -358,18 +374,18 @@ main {
 			}
 			.logo_type {
 				position: absolute;
-				top: 51px;
-				left: 50px;
-				width: 180px * 1.2;
-				height: 35px * 1.2;
+				top: 49px;
+				left: 40px;
+				width: 180px;
+				height: 35px;
 				background: url('../images/logo_type.png') no-repeat 0 0/100% auto;
 				@include hide_text();
 
-				@include desktop() {
-					top: 49px;
-					left: 40px;
-					width: 180px;
-					height: 35px;
+				@include desktop(false) {
+					top: 51px;
+					left: 50px;
+					width: 180px * 1.2;
+					height: 35px * 1.2;
 				}
 				@include mobile() {
 					display: none;
@@ -410,6 +426,9 @@ main {
 			background: $cyan;
 			padding-bottom: 17vw;
 
+			@include desktop(false) {
+				padding-bottom: 1800px * 0.17;
+			}
 			@include desktop() {
 				padding-bottom: 19vw;
 			}
@@ -425,6 +444,24 @@ main {
 				}
 				p {
 					animation-delay: 0.4s;
+				}
+				+ .screenshots_block {
+					.screenshot_a,
+					.screenshot_b,
+					.screenshot_c {
+						opacity: 1;
+						transform: translateX(0);
+
+						&:before {
+							animation: sway 10s $easeCubic infinite alternate;
+						}
+					}
+					.screenshot_b:before {
+						animation-delay: -2s;
+					}
+					.screenshot_c:before {
+						animation-delay: -4s;
+					}
 				}
 			}
 			h3 {
@@ -444,6 +481,9 @@ main {
 			padding-right: 0;
 			padding-top: 17vw;
 
+			@include desktop(false) {
+				padding-top: 1800px * 0.2;
+			}
 			@include desktop() {
 				padding-top: 19vw;
 			}
@@ -654,35 +694,120 @@ main {
 			}
 		}
 	}
-	.screenshots {
+	.screenshots_block {
 		position: relative;
+		z-index: 1;
 		background: $mint;
+		height: 27vw;
 
-		&:after {
-			content: '';
-			display: block;
-			position: relative;
-			z-index: 1;
-			width: 60%;
-			padding-top: 43.12%; // 57.12%;
-			margin: 0 auto;
-		    margin-bottom: -20.5%; // -37.5%;
-		    transform: translateY(-22.5%);
-			background: url('../images/screenshots.png') no-repeat 0 0/100% auto;
+		@include desktop(false) {
+			height: 1800px * 0.27;
+		}
+		@include mobile() {
+			height: 100vw;
+		}
+		> * {
+			position: absolute;
+			top: 0;
+			transition: transform 3s $easeOutCubic;
 
-			@include desktop () {
-				width: 80%;
-				padding-top: 57.12%;
-				transform: translateY(-25%);
-			    margin-bottom: -28%;
+			&:before {
+				content: '';
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				border-radius: 0.66vw;
+				background-position: 0 0;
+				background-size: 100% auto;
+				background-repeat: no-repeat;
+
+				@include desktop(false) {
+					border-radius: 1800px * 0.012;
+				}
+				@include mobile() {
+					border-radius: 1.2vw;
+				}
+			}
+		}
+		.screenshot_a {
+			top: -44%;
+			left: percentage(0.555);
+			width: percentage(0.3284);
+			height: auto;
+			padding-top: percentage(0.3284 * 0.6);
+			transform: translateX(50vw);
+			transition-delay: 0.5s, 0.5s;
+
+			@include desktop(false) {
+				width: 1800px * 0.3284;
+				padding-top: 1800px * 0.3284 * 0.6;
+				// transform: 1800px * 0.5;
 			}
 			@include mobile() {
-				width: 100%;
-				padding-top: 140%;
-			    margin-bottom: -51%;
-			    transform: translateY(-17%);
-				background: url('../images/screenshots.png') no-repeat 106.2% 0/195% auto,
-					url('../images/screenshots.png') no-repeat -58% 12vw/195% auto;
+				top: -20%;
+				left: 10%;
+				width: percentage(0.8);
+				padding-top: percentage(0.8 * 0.6);
+				transform: translateX(100vw);
+			}
+			&:before {
+				background-color: $night;
+				background-image: url('../images/screenshot_a.png');
+				box-shadow: 0 12px 30px rgba($night,0.45);
+			}
+		}
+		.screenshot_b {
+			top: -10%;
+			left: percentage(0.1116);
+			width: percentage(0.378);
+			padding-top: percentage(0.378 * 0.67);
+			transform: translateX(-50vw);
+			transition-delay: 1s, 1s;
+
+			@include desktop(false) {
+				width: 1800px * 0.378;
+				padding-top: 1800px * 0.378 * 0.67;
+				// transform: 1800px * -0.5;
+			}
+			@include mobile() {
+				top: 14%;
+				left: 50%;
+				width: percentage(0.92);
+				padding-top: percentage(0.92 * 0.67);
+				transform: translateX(-150vw);
+			}
+			&:before {
+				background-color: #fff;
+				background-image: url('../images/screenshot_b.png');
+				box-shadow: 0 8px 20px rgba($night,0.3);
+			}
+		}
+		.screenshot_c {
+			top: 47%;
+			left: 30%;
+			width: percentage(0.3888);
+			padding-top: percentage(0.3888 * 0.7316);
+			transform: translateX(75vw);
+			transition-delay: 1.5s, 1.5s;
+
+			@include desktop(false) {
+				width: 1800px * 0.3888;
+				padding-top: 1800px * 0.3888 * 0.7316;
+				// transform: 1800px * 0.75;
+			}
+			@include mobile() {
+				top: 50%;
+				left: 10%;
+				width: percentage(0.947);
+				padding-top: percentage(0.947 * 0.7316);
+				transform: translateX(100vw);
+			}
+			&:before {
+				background-color: #fff;
+				background-image: url('../images/screenshot_c.png');
+				box-shadow: 0 4px 10px rgba($night,0.15);
 			}
 		}
 	}
