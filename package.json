@@ -3,12 +3,12 @@
     "clean": "rm -rf dist && mkdir dist",
     "dist": "npm run clean && npm run static && npm run sass",
     "static": "rsync -a src/** dist --exclude sass",
-    "sass": "node-sass --output-style compressed src/sass/styles.scss dist/css/styles.css",
+    "sass": "sass --style=compressed --no-source-map src/sass/styles.scss dist/css/styles.css",
     "open": "open dist/index.html",
     "deploy": "gh-pages --dist dist --branch master"
   },
   "devDependencies": {
     "gh-pages": "^2.1.1",
-    "node-sass": "^9.0.0"
+    "sass": "^1.80.6"
   }
 }
